@@ -55,7 +55,8 @@ static int cmd_q(char *args) {
 
 // todo
 static int cmd_si(char *args) {
-  cpu_exec(1);
+  if(args) cpu_exec(args[0] - 0x30);
+  else cpu_exec(1);
   return 0;
 }
 
