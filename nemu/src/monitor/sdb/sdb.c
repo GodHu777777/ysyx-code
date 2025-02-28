@@ -50,6 +50,7 @@ static int cmd_c(char *args) {
 
 static int cmd_q(char *args) {
   // cpu_exec(-1);
+  nemu_state.state = NEMU_QUIT;
   return -1;
 }
 
@@ -58,6 +59,12 @@ static int cmd_si(char *args) {
   cpu_exec(1);
   return 0;
 }
+
+static int cmd_info(char *args) {
+  cpu_exec(0);
+  return 0;
+}
+
 
 static int cmd_help(char *args);
 
@@ -73,6 +80,7 @@ static struct {
   /* TODO: Add more commands */
 
   {"si", "single step", cmd_si},
+  {"info", "print information", cmd_info},
 
 };
 
@@ -106,6 +114,7 @@ void sdb_set_batch_mode() {
 }
 
 void sdb_mainloop() {
+  // don't read
   if (is_batch_mode) {
     cmd_c(NULL);
     return;
