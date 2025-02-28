@@ -61,7 +61,7 @@ static int cmd_si(char *args) {
 }
 
 static int cmd_info(char *args) {
-  cpu_exec(0);
+  isa_reg_display();
   return 0;
 }
 
