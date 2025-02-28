@@ -55,7 +55,7 @@ static int cmd_q(char *args) {
 
 // todo
 static int cmd_si(char *args) {
-  cpu_exec(-1);
+  cpu_exec(1);
   return 0;
 }
 
