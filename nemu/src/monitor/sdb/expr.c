@@ -86,10 +86,15 @@ static bool make_token(char *e) {
   int i;
   regmatch_t pmatch;
 
+  // @:
+  pmatch.rm_so = 0;
+  pmatch.rm_eo = strlen(e);
+
   nr_token = 0;
 
   while (e[position] != '\0') {
     /* Try all rules one by one. */
+    // @hgh: each i represents each 
     for (i = 0; i < NR_REGEX; i ++) {
       // assert(0);
       if (regexec(&re[i], e + position, 1, &pmatch, 0) == 0 && pmatch.rm_so == 0) {
