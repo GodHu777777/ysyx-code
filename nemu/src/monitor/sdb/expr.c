@@ -88,9 +88,9 @@ static bool make_token(char *e) {
   int i;
   regmatch_t pmatch;
 
-  // @:
-  pmatch.rm_so = 0;
-  pmatch.rm_eo = strlen(e);
+  // // @:
+  // pmatch.rm_so = 0;
+  // pmatch.rm_eo = strlen(e);
 
   nr_token = 0;
 
