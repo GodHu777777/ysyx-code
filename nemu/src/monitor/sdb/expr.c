@@ -101,10 +101,13 @@ static bool make_token(char *e) {
     // @hgh: each i represents each 
     for (i = 0; i < NR_REGEX; i ++) {
       // assert(0);
+
+      Log("HGH: %d", pmatch.rm_so);
+
       if (regexec(&re[i], e + position, 1, &pmatch, 0) == 0) {
         // assert(0);
         char *substr_start = e + position;
-        int substr_len = pmatch.rm_eo - 1;
+        int substr_len = pmatch.rm_eo;
 
         Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
             i, rules[i].regex, position, substr_len, substr_len, substr_start);
