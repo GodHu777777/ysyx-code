@@ -19,7 +19,7 @@
  * Type 'man regex' for more information about POSIX regex functions.
  */
 #include <regex.h>
-
+static bool make_token(char *);
 enum {
   TK_NOTYPE = 256, TK_EQ,
 
@@ -67,6 +67,10 @@ void init_regex() {
       panic("regex compilation failed: %s\n%s", error_msg, rules[i].regex);
     }
   }
+
+  // @hgh: debug
+  make_token("1+2+3");
+
 }
 
 typedef struct token {
