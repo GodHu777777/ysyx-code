@@ -72,7 +72,7 @@ static int cmd_x(char *args) {
   int n = atoi(arg);
   vaddr_t addr = strtol(arg2, NULL, 16);
   for(int i = 0; i < n; i++) {
-    printf("[%8x]: %x\n", addr, paddr_read(addr, 4));
+    printf("[0x%8x]: %8x\n", addr, paddr_read(addr, 4));
     addr += 4;
   }
   return 0; 
