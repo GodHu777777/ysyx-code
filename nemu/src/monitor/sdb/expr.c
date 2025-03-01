@@ -103,7 +103,7 @@ static bool make_token(char *e) {
       // assert(0);
       if (regexec(&re[i], e + position, 1, &pmatch, 0) == 0) {
         // assert(0);
-        char *substr_start = e + position;
+        char *substr_start = e + position + pmatch.rm_eo;
         int substr_len = pmatch.rm_eo - pmatch.rm_so;
         
         Log("HGH: %d", pmatch.rm_so);
