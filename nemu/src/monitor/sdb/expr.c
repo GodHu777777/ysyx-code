@@ -104,7 +104,7 @@ static bool make_token(char *e) {
       if (regexec(&re[i], e + position, 1, &pmatch, 0) == 0) {
         // assert(0);
         char *substr_start = e + position;
-        int substr_len = pmatch.rm_eo;
+        int substr_len = pmatch.rm_eo - pmatch.rm_so;
         
         Log("HGH: %d", pmatch.rm_so);
         Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
