@@ -45,7 +45,7 @@ static struct rule {
   {"\\/", '/'},         // divise
   {"\\(", '('},         // left parenthesis
   {"\\)", ')'},         // right parenthesis
-  {"\\d+", TK_NUM},     // number
+  {"[0-9]+", TK_NUM},     // number
   
 };
 
