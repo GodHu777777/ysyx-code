@@ -24,7 +24,7 @@ enum {
   TK_NOTYPE = 256, TK_EQ,
 
   /* TODO: Add more token types */
-
+  TK_NUM
 };
 
 static struct rule {
@@ -44,6 +44,7 @@ static struct rule {
   {"\\/", '/'},         // divise
   {"\\(", '('},         // left parenthesis
   {"\\)", ')'},         // right parenthesis
+  {"\\d+", TK_NUM},     // number
   
 };
 
@@ -92,13 +93,15 @@ static bool make_token(char *e) {
 
   nr_token = 0;
 
+  // int cnt = 0;
+
   while (e[position] != '\0') {
     /* Try all rules one by one. */
     // @hgh: each i represents each 
     for (i = 0; i < NR_REGEX; i ++) {
       // assert(0);
-      if (regexec(&re[i], e + position, 1, &pmatch, 0) == 0) {
-        // assert(0);
+      if (regexec(&re[i], e + position, 1, &pmatch, 0) == 0 && pmatch.rm_so >= 0) {
+        assert(0);
         char *substr_start = e + position;
         int substr_len = pmatch.rm_eo;
 
