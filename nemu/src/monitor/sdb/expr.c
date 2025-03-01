@@ -101,9 +101,6 @@ static bool make_token(char *e) {
     // @hgh: each i represents each 
     for (i = 0; i < NR_REGEX; i ++) {
       // assert(0);
-
-     
-
       if (regexec(&re[i], e + position, 1, &pmatch, 0) == 0) {
         // assert(0);
         char *substr_start = e + position;
