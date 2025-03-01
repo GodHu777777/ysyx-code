@@ -44,9 +44,6 @@ static char* rl_gets() {
 }
 
 static int cmd_c(char *args) {
-  // // @hgh: debug token
-  // make_token("4+21324*10");
-
   cpu_exec(-1);
   return 0;
 }
