@@ -42,7 +42,7 @@ static struct rule {
   {"\\-", '-'},         // minus
   {"\\*", '*'},         // multiply
   {"\\/", '/'},         // divise
-  {"(abc)", '('},         // left parenthesis
+  {"\\(", '('},         // left parenthesis
   {"\\)", ')'},         // right parenthesis
   
 };
