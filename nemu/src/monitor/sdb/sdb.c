@@ -44,6 +44,9 @@ static char* rl_gets() {
 }
 
 static int cmd_c(char *args) {
+  // // @hgh: debug token
+  // make_token("4+21324*10");
+
   cpu_exec(-1);
   return 0;
 }
@@ -71,7 +74,7 @@ static int cmd_x(char *args) {
   char *arg2 = strtok(NULL, " ");
   int n = atoi(arg);
   vaddr_t addr = strtol(arg2, NULL, 16);
-  
+
   // vaddr_t addr = 
   for(int i = 0; i < n; i++) {
     printf("[0x%8x]: %8x\n", addr, paddr_read(addr, 4));
