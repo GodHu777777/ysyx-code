@@ -88,7 +88,7 @@ void init_regex() {
   }
 
   // @hgh: debug
-  make_token("(10 + 3) * (2 - 1)");
+  make_token("((10 + 3)) * ((2 - 1))");
   int ans = eval(0, cnt - 1);
 
   Log("HGHGH: %d", ans);
