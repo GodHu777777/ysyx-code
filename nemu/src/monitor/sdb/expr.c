@@ -206,6 +206,7 @@ int eval(int p, int q) {
         Log("DEBUG: %d", i);
         if(op == -1) { // first operator; do initialization
           op = i; 
+          assert(0);
           if(tokens[i].type == '+' || tokens[i].type == '-') priority = 1;
           else priority = 2;
         }
@@ -231,7 +232,7 @@ int eval(int p, int q) {
 
     Log("HGHGH: %d", op);
     // for compiler
-    assert(0);
+    assert(0);   
     return 0;
   }
 }
