@@ -206,7 +206,7 @@ int eval(int p, int q) {
         Log("DEBUG: %d", i);
         if(op == -1) { // first operator; do initialization
           op = i; 
-          Log("FUCK op: %d; i: %d", op, i);
+          Log("@@@ op: %d; i: %d", op, i);
           assert(op == -1);
           if(tokens[i].type == '+' || tokens[i].type == '-') priority = 1;
           else priority = 2;
