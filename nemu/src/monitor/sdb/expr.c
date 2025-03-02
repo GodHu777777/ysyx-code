@@ -200,6 +200,7 @@ int eval(int p, int q) {
         while (tokens[i].type != ')') i++;
       }
       if(is_operator(tokens[i].type)) {
+        Log("DEBUG: %d", i);
         if(op == -1) { // first operator; do initialization
           op = i; 
           if(tokens[i].type == '+' || tokens[i].type == '-') priority = 1;
