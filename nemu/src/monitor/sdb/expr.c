@@ -90,14 +90,14 @@ void init_regex() {
     }
   }
 
-  // @hgh: debug
-  make_token("(((10 + 3))) * ((2 - 1))");
-  int ans = eval(0, cnt - 1);
+  // // @hgh: debug
+  // make_token("(((10 + 3))) * ((2 - 1))");
+  // int ans = eval(0, cnt - 1);
 
-  make_token("(1+2)");
-  ans = eval(0, cnt - 1);
+  // make_token("(1+2)");
+  // ans = eval(0, cnt - 1);
 
-  Log("HGHGH: %d", ans);
+  // Log("HGHGH: %d", ans);
 }
 
 typedef struct token {
@@ -159,7 +159,7 @@ static bool make_token(char *e) {
       return false;
     }
   }
-
+  cnt = 0;
   return true;
 }
 
