@@ -27,6 +27,7 @@ enum {
   TK_NUM
 };
 
+
 static struct rule {
   const char *regex;
   int token_type;
@@ -148,4 +149,76 @@ word_t expr(char *e, bool *success) {
   TODO();
 
   return 0;
+}
+
+bool is_operator(char ch) {
+  if(ch == '+' || ch == '-' || ch == '*' || ch == '/') return true;
+  return false;
+}
+
+bool check_parentheses(int p, int q) {
+  if(tokens[p].type != '(' || tokens[q].type != ')') return false;
+  int cnt = 0;
+  for(int i = p + 1; i < q; i++) {
+    if(tokens[i].type == '(') cnt++;
+    if(tokens[i].type == ')') cnt--;
+    if(cnt < 0) return false;
+  }
+  if(cnt == 0) return true;
+  return false;
+}
+
+int eval(int p, int q) {
+  if(p > q) {
+    assert(0);
+  } 
+  else if(p == q) {
+    return atoi(tokens[p].str);
+  }
+  else if(check_parentheses(p, q) == true) {
+    return eval(p + 1, q - 1);
+  }
+  else {
+    // to find the latest operator 
+    // and calculate the result of the two sides of the operator
+    // denote + or - as 1; * or / as 2
+    int priority = 2;
+    int op = -1;
+
+    // find the operator with the lowest priority
+    // and saves its position in op
+    for(int i = p; i <= q; i++) {
+      if(tokens[i].type == '(') {
+        while (tokens[i].type != ')') i++;
+      }
+      if(is_operator(tokens[i].type)) {
+        if(op == -1) { // first operator; do initialization
+          op = i; 
+          if(tokens[i].type == '+' || tokens[i].type == '-') priority = 1;
+          else priority = 2;
+        }
+        else { // later operator
+          // + or - always the lowest priority
+          if(tokens[i].type == '+' || tokens[i].type == '-') {
+            op = i;
+            priority = 1;
+          }
+          // * or / is recorded only if the current operator is * or /
+          else {
+            if(priority == 2) {
+              op = i;
+            }
+          }
+        }
+      }
+    }
+    if(tokens[op].type == '+') return eval(p, op - 1) + eval(op + 1, q);
+    if(tokens[op].type == '-') return eval(p, op - 1) - eval(op + 1, q); 
+    if(tokens[op].type == '*') return eval(p, op - 1) * eval(op + 1, q);
+    if(tokens[op].type == '/') return eval(p, op - 1) / eval(op + 1, q);
+
+    // for compiler
+    assert(0);
+    return 0;
+  }
 }
