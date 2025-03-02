@@ -71,7 +71,7 @@ void init_regex() {
   }
 
   // @hgh: debug
-  make_token("1+2+3/*()");
+  make_token("1123+2+3/*()");
 
 }
 
