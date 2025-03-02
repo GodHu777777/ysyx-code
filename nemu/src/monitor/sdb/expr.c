@@ -132,7 +132,7 @@ static bool make_token(char *e) {
           default: tokens[cnt].type = rules[i].token_type;
 
           // Log("HGHGH: %d, %x", cnt, tokens[cnt].type);
-          // cnt++;
+          cnt++;
         }
 
         break;
