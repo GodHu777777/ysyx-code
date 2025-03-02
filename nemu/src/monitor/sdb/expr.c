@@ -20,6 +20,12 @@
  */
 #include <regex.h>
 static bool make_token(char *);
+
+// @hgh: 
+bool is_operator(char ch);
+bool check_parentheses(int p, int q);
+int eval(int p, int q);
+
 enum {
   TK_NOTYPE = 256, TK_EQ,
 
@@ -72,8 +78,10 @@ void init_regex() {
   }
 
   // @hgh: debug
-  make_token("1123+2+3/*()");
+  make_token("4 +3*(2- 1)");
+  int ans = eval(0, 7);
 
+  Log("HGHGH: %d", ans);
 }
 
 typedef struct token {
