@@ -224,7 +224,7 @@ int eval(int p, int q) {
           }
         }
 
-        Log("@@@@ %d", op);
+        Log("@@@@ %d, %c", op, tokens[op].type);
       }
 
     }
