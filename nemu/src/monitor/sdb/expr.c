@@ -168,13 +168,13 @@ bool is_operator(char ch) {
 
 bool check_parentheses(int p, int q) {
   if(tokens[p].type != '(' || tokens[q].type != ')') return false;
-  int cnt = 0;
+  int top = 0;
   for(int i = p + 1; i < q; i++) {
-    if(tokens[i].type == '(') cnt++;
-    if(tokens[i].type == ')') cnt--;
-    if(cnt < 0) return false;
+    if(tokens[i].type == '(') top++;
+    if(tokens[i].type == ')') top--;
+    if(top < 0) return false;
   }
-  if(cnt == 0) return true;
+  if(top == 0) return true;
   return false;
 }
 
