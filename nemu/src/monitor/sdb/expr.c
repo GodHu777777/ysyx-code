@@ -22,9 +22,17 @@
 static bool make_token(char *);
 
 // @hgh: 
+
+// return true when ch is an operator, ch is a token
 bool is_operator(char ch);
+
+// return true when the expression is surrounded by correct parentheses
 bool check_parentheses(int p, int q);
+
+// evaluate the expression from token p to q 
+// NOTE!: tokens must not contain any spaces
 int eval(int p, int q);
+
 // size of tokens
 int cnt = 0;
 
@@ -80,7 +88,7 @@ void init_regex() {
   }
 
   // @hgh: debug
-  make_token("(4 + 3) * (2 - 1)");
+  make_token("(10 + 3) * (2 - 1)");
   int ans = eval(0, cnt - 1);
 
   Log("HGHGH: %d", ans);
