@@ -20,6 +20,10 @@
 #include <assert.h>
 #include <string.h>
 
+int choose(int n) {
+  return rand() % n;
+}
+
 // this should be enough
 static char buf[65536] = {};
 static char code_buf[65536 + 128] = {}; // a little larger than `buf`
@@ -31,9 +35,31 @@ static char *code_format =
 "  return 0; "
 "}";
 
-static void gen_rand_expr() {
-  buf[0] = '\0';
+int buffer_length = 0;
+
+
+void gen_num() {
+  int random_number = choose(1 << 5);
+  char str_number[20]; // 定义一个足够大的字符数组
+  sprintf(str_number, "%d", random_number);
+  strcat(buf, str_number);
 }
+
+static void gen_rand_op() {
+  char ops[] = {'+', '-', '*', '/'};
+  strcat(buf, " ");
+  strncat(buf, &ops[choose(sizeof(ops) / sizeof(ops[0]))], 1);
+  strcat(buf, " ");
+}
+
+static void gen_rand_expr() {
+  switch (choose(3)) {
+    case 0: gen_num(); break;
+    case 1: strcat(buf, "("); gen_rand_expr(); strcat(buf, ")"); break;
+    default: gen_rand_expr(); gen_rand_op(); gen_rand_expr(); break;
+  }
+}
+
 
 int main(int argc, char *argv[]) {
   int seed = time(0);
