@@ -228,6 +228,8 @@ int eval(int p, int q) {
       }
 
     }
+    Log("@@@@ QAQ %d, %c", op, tokens[op].type);
+
     if(tokens[op].type == '+') return eval(p, op - 1) + eval(op + 1, q);
     if(tokens[op].type == '-') return eval(p, op - 1) - eval(op + 1, q); 
     if(tokens[op].type == '*') return eval(p, op - 1) * eval(op + 1, q);
