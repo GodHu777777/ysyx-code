@@ -225,6 +225,7 @@ int eval(int p, int q) {
     if(tokens[op].type == '*') return eval(p, op - 1) * eval(op + 1, q);
     if(tokens[op].type == '/') return eval(p, op - 1) / eval(op + 1, q);
 
+    Log("HGHGH: %d", op);
     // for compiler
     assert(0);
     return 0;
