@@ -25,6 +25,8 @@ static bool make_token(char *);
 bool is_operator(char ch);
 bool check_parentheses(int p, int q);
 int eval(int p, int q);
+// size of tokens
+int cnt = 0;
 
 enum {
   TK_NOTYPE = 256, TK_EQ,
@@ -79,7 +81,7 @@ void init_regex() {
 
   // @hgh: debug
   make_token("4 +3*(2- 1)");
-  int ans = eval(0, 7);
+  int ans = eval(0, cnt - 1);
 
   Log("HGHGH: %d", ans);
 }
@@ -103,7 +105,7 @@ static bool make_token(char *e) {
 
   nr_token = 0;
 
-  int cnt = 0;
+  
 
   while (e[position] != '\0') {
     /* Try all rules one by one. */
