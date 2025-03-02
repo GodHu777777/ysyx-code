@@ -22,6 +22,9 @@
 
 static int is_batch_mode = false;
 
+// hgh: for print expression and saves values
+int variable_count = 0;
+int variables[10010];
 void init_regex();
 void init_wp_pool();
 
@@ -80,6 +83,10 @@ static int cmd_x(char *args) {
   return 0; 
 }
 
+static int cmd_p(char *args) {
+  expr(args, NULL);
+  return 0; 
+}
 
 static int cmd_help(char *args);
 
@@ -97,6 +104,7 @@ static struct {
   {"si", "single step", cmd_si},
   {"info", "print information", cmd_info},
   {"x", "scan memory", cmd_x},
+  {"p", "print expression value", cmd_p},
 };
 
 #define NR_CMD ARRLEN(cmd_table)

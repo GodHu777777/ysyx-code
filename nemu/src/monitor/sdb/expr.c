@@ -19,6 +19,9 @@
  * Type 'man regex' for more information about POSIX regex functions.
  */
 #include <regex.h>
+// @hgh: to use "varibles"
+#include "sdb.h"
+
 static bool make_token(char *);
 
 // @hgh: 
@@ -165,8 +168,11 @@ word_t expr(char *e, bool *success) {
   }
 
   /* TODO: Insert codes to evaluate the expression. */
-  TODO();
-
+  // TODO();
+  make_token(e);
+  variables[variable_count] = eval(0, cnt - 1);
+  printf("$%d: %d", variable_count, variables[variable_count]);
+  variable_count ++;
   return 0;
 }
 

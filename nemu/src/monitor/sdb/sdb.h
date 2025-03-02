@@ -21,3 +21,6 @@
 word_t expr(char *e, bool *success);
 
 #endif
+
+extern int variable_count;
+extern int variables[10010];
