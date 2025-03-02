@@ -174,7 +174,7 @@ word_t expr(char *e, bool *success) {
   // TODO();
   // save printed variables 
   variables[variable_count] = eval(0, cnt - 1);
-  printf("$%d: %d", variable_count, variables[variable_count]);
+  printf("$%d: %d\n", variable_count, variables[variable_count]);
   variable_count ++;
 
   // clear tokens
