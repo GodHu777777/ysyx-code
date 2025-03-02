@@ -226,9 +226,9 @@ int eval(int p, int q) {
 
         Log("@@@@ %d, %c", op, tokens[op].type);
       }
-
+      Log("@@@@ QAQ %d, %d", op, i);
     }
-    Log("@@@@ QAQ %d, %c", op, tokens[op].type);
+    
 
     if(tokens[op].type == '+') return eval(p, op - 1) + eval(op + 1, q);
     if(tokens[op].type == '-') return eval(p, op - 1) - eval(op + 1, q); 
