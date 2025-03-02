@@ -96,7 +96,7 @@ void init_regex() {
 
   make_token("(1+2)");
   int ans = eval(0, cnt - 1);
-
+  cnt = 0;
   Log("HGHGH: %d", ans);
 }
 
