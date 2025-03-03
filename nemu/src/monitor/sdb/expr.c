@@ -97,10 +97,10 @@ void init_regex() {
   // make_token("(((10 + 3))) * ((2 - 1))");
   // int ans = eval(0, cnt - 1);
 
-  make_token("(1+2)");
-  int ans = eval(0, cnt - 1);
-  cnt = 0;
-  Log("HGHGH: %d", ans);
+  // make_token("(1+2)");
+  // int ans = eval(0, cnt - 1);
+  // cnt = 0;
+  // Log("HGHGH: %d", ans);
 }
 
 typedef struct token {
