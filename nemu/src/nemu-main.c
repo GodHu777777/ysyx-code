@@ -53,6 +53,7 @@ int main(int argc, char *argv[]) {
         }
 
         expr(expression, NULL);
+        
         assert(variables[variable_count] == number);
     }
 
