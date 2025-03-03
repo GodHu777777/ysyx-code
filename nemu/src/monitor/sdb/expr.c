@@ -237,7 +237,7 @@ int eval(int p, int q) {
         Log("i: %d, token[i].type: %c", i, tokens[i].type);
         if(op == -1) { // first operator; do initialization
           op = i; 
-          Log("@@@ op: %d; i: %d", op, i);
+          Log("BEGIN op: %d; i: %d", op, i);
           if(tokens[i].type == '+' || tokens[i].type == '-') priority = 1;
           else priority = 2;
         }
