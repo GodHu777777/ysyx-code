@@ -52,7 +52,7 @@ int main(int argc, char *argv[]) {
             // 可以选择跳过当前行或者进行更详细的错误处理
         }
 
-        expr("(6 ) + (14)", NULL);
+        expr(expression, NULL);
         // printf("");
         assert(variables[variable_count - 1] == number);
     }
