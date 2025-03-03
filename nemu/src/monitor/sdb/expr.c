@@ -230,8 +230,17 @@ int eval(int p, int q) {
     // find the operator with the lowest priority
     // and saves its position in op
     for(int i = p; i <= q; i++) {
+      /* you need to specify the parentheses are totally over
+       if one opretor is in a parentheses 
+       it is more prior than operator outside
+      */
       if(tokens[i].type == '(') {
-        while (tokens[i].type != ')') i++;
+        int parent_count = 1;
+        while(parent_count != 0) {
+          if(tokens[i].type == '(') parent_count++;
+          if(tokens[i].type == ')') parent_count--;
+          i++;
+        }
       }
       if(is_operator(tokens[i].type)) {
         Log("i: %d, token[i].type: %c", i, tokens[i].type);
