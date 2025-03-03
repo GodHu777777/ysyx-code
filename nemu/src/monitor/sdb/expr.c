@@ -234,7 +234,7 @@ int eval(int p, int q) {
         while (tokens[i].type != ')') i++;
       }
       if(is_operator(tokens[i].type)) {
-        Log("DEBUG: %d, %c", i, tokens[i].type);
+        Log("i: %d, token[i].type: %c", i, tokens[i].type);
         if(op == -1) { // first operator; do initialization
           op = i; 
           Log("@@@ op: %d; i: %d", op, i);
