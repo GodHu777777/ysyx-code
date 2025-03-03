@@ -45,10 +45,10 @@ int main(int argc, char *argv[]) {
         // 使用 sscanf 解析每一行
         if (sscanf(line, "%d %[^\n]", &number, expression) == 2) {
             // sscanf 返回成功解析的字段数量，这里期望解析到两个字段
-            // printf("Number: %d, Expression: %s\n", number, expression);
+            printf("Number: %d, Expression: %s\n", number, expression);
         } else {
             // 如果解析失败，可能是格式不符合预期或者空行等情况
-            // fprintf(stderr, "Warning: Could not parse line: %s", line);
+            fprintf(stderr, "Warning: Could not parse line: %s", line);
             // 可以选择跳过当前行或者进行更详细的错误处理
         }
 
