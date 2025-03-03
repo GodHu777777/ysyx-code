@@ -25,6 +25,7 @@ static int is_batch_mode = false;
 // hgh: for print expression and saves values
 int variable_count = 0;
 int variables[10010];
+
 void init_regex();
 void init_wp_pool();
 
