@@ -52,7 +52,7 @@ int main(int argc, char *argv[]) {
             // 可以选择跳过当前行或者进行更详细的错误处理
         }
 
-        expr("(17/((( ( 21)) )) )/ (3 )", NULL);
+        expr("(17/((( ( 21)) )) )/ (3 ) - (  (7)-28  )", NULL);
         printf("@1: %d\n", variable_count);
         assert(variables[variable_count - 1] == number);
     }
