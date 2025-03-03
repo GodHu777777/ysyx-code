@@ -236,7 +236,7 @@ int eval(int p, int q) {
       */
       if(tokens[i].type == '(') {
         int parent_count = 1;
-        while(parent_count != 0) {
+        while(parent_count != 0 && i < cnt) {
           if(tokens[i].type == '(') parent_count++;
           if(tokens[i].type == ')') parent_count--;
           i++;
