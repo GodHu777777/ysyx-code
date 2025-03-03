@@ -19,6 +19,9 @@
 #include <time.h>
 #include <assert.h>
 #include <string.h>
+#include <signal.h>
+
+#define MAX_DEPTH 15
 
 int choose(int n) {
   return rand() % n;
@@ -29,11 +32,23 @@ static char buf[65536] = {};
 static char code_buf[65536 + 128] = {}; // a little larger than `buf`
 static char *code_format =
 "#include <stdio.h>\n"
-"int main() { "
-"  unsigned result = %s; "
-"  printf(\"%%u\", result); "
-"  return 0; "
-"}";
+"#include <signal.h>\n"
+"#include <stdlib.h>\n"
+
+"void handle_sigfpe(int sig) {\n"
+// "    printf(\"Division by zero error!\\n\");\n"
+"    printf(\"\");\n"
+"    exit(1); // \n"
+"}"
+
+
+"int main() { \n"
+"  signal(SIGFPE, handle_sigfpe);\n"
+"  unsigned result = %s; \n"
+"  char *s = \"%s\";\n"
+"  printf(\"%%u %%s \\n\", result, s); \n"
+"  return 0; \n"
+"}\n";
 
 int buffer_length = 0;
 
@@ -47,21 +62,33 @@ void gen_num() {
 
 static void gen_rand_op() {
   char ops[] = {'+', '-', '*', '/'};
-  strcat(buf, " ");
   strncat(buf, &ops[choose(sizeof(ops) / sizeof(ops[0]))], 1);
-  strcat(buf, " ");
+
 }
 
-static void gen_rand_expr() {
+static void gen_rand_expr(int depth) {
+  if(depth > MAX_DEPTH) {
+    gen_num();
+    return;
+  }
+
+  // generate random space
+  if(choose(2)) strcat(buf, " ");
+  
   switch (choose(3)) {
     case 0: gen_num(); break;
-    case 1: strcat(buf, "("); gen_rand_expr(); strcat(buf, ")"); break;
-    default: gen_rand_expr(); gen_rand_op(); gen_rand_expr(); break;
+    case 1: strcat(buf, "("); gen_rand_expr(depth + 1); strcat(buf, ")"); break;
+    default: gen_rand_expr(depth + 1); gen_rand_op(); gen_rand_expr(depth + 1); break;
   }
+
+  // generate random space
+  if(choose(2)) strcat(buf, " ");
+  
 }
 
 
 int main(int argc, char *argv[]) {
+
   int seed = time(0);
   srand(seed);
   int loop = 1;
@@ -70,26 +97,31 @@ int main(int argc, char *argv[]) {
   }
   int i;
   for (i = 0; i < loop; i ++) {
-    gen_rand_expr();
+    buf[0] = '\0'; // clear buf before generating new expression
+    gen_rand_expr(0);
 
-    sprintf(code_buf, code_format, buf);
 
-    FILE *fp = fopen("/tmp/.code.c", "w");
+    // save buf into code_buf 
+    sprintf(code_buf, code_format, buf, buf);
+
+    FILE *fp = fopen("./.code.c", "w");
     assert(fp != NULL);
+
+    // write code_buf into ./.code.c
     fputs(code_buf, fp);
     fclose(fp);
 
-    int ret = system("gcc /tmp/.code.c -o /tmp/.expr");
+    int ret = system("gcc ./.code.c -o ./.expr && ./.expr");
     if (ret != 0) continue;
 
-    fp = popen("/tmp/.expr", "r");
+    fp = popen("./.expr", "r");
     assert(fp != NULL);
 
     int result;
     ret = fscanf(fp, "%d", &result);
     pclose(fp);
 
-    printf("%u %s\n", result, buf);
+    // printf("%s\n",  buf);
   }
   return 0;
 }
