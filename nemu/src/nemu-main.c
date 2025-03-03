@@ -53,7 +53,7 @@ int main(int argc, char *argv[]) {
         }
 
         expr(expression, NULL);
-        // printf("");
+        printf("@1: %d\n", variable_count);
         assert(variables[variable_count - 1] == number);
     }
 
