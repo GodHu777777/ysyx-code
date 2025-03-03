@@ -208,6 +208,7 @@ bool check_parentheses(int p, int q) {
   return false;
 }
 
+// calculate the value of expression in [p, q]
 int eval(int p, int q) {
   if(p > q) {
     Log("%d %d", p, q);
