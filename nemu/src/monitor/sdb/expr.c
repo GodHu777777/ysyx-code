@@ -155,7 +155,7 @@ static bool make_token(char *e) {
             
           default: tokens[cnt].type = rules[i].token_type;
 
-          printf("HGHGH: %d, %x\n", cnt, tokens[cnt].type);
+          printf("HGHGH: %d, %c\n", cnt, tokens[cnt].type);
           cnt++;
         }
 
