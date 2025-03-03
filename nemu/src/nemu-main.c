@@ -54,7 +54,7 @@ int main(int argc, char *argv[]) {
 
         expr(expression, NULL);
         // printf("");
-        assert(variables[variable_count] == number);
+        assert(variables[variable_count - 1] == number);
     }
 
     fclose(fp);
