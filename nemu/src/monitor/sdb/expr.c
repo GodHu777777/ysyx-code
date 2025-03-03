@@ -240,6 +240,7 @@ int eval(int p, int q) {
           if(tokens[i].type == '(') parent_count++;
           if(tokens[i].type == ')') parent_count--;
           i++;
+          printf("pa_ch: %d\n", i);
         }
       }
       if(is_operator(tokens[i].type)) {
