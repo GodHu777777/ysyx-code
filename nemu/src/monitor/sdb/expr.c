@@ -147,7 +147,8 @@ static bool make_token(char *e) {
 
         switch (rules[i].token_type) {
           case TK_NOTYPE: break;
-          case TK_NUM: for(int j = 0; j < substr_len; j++) tokens[cnt].str[j] = substr_start[j]; // save string
+          case TK_NUM: tokens[cnt].str[0] = '\0'; // clear at first
+          for(int j = 0; j < substr_len; j++) tokens[cnt].str[j] = substr_start[j]; // save string
           default: tokens[cnt].type = rules[i].token_type;
 
           // Log("HGHGH: %d, %x", cnt, tokens[cnt].type);
