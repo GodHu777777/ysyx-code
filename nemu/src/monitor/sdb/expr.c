@@ -155,7 +155,7 @@ static bool make_token(char *e) {
           case TK_HEX_NUM:
             // assert(0);
             // Log("[DEBUG]: substr: %s %d", substr_start, substr_len);
-            char* tmp_str = "\0";
+            char* tmp_str = (char*)malloc(substr_len + 1);
             strncpy(tmp_str, substr_start, substr_len);
             int value_in_decimal = strtol(tmp_str, NULL, 16);
             Log("%d", value_in_decimal);
