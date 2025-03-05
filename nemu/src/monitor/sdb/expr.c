@@ -152,12 +152,15 @@ static bool make_token(char *e) {
           case TK_NOTYPE: break;
           // to check if '*' is a multiplication or deref
           case '*': if(is_operator(tokens[cnt - 1].type) || tokens[cnt - 1].type == '(') tokens[cnt].type = TK_REF;break; 
+          case TK_HEX_NUM:
+            int value_in_decimal = strtol(substr_start, NULL, 16);
+            sprintf(substr_start, "%d", value_in_decimal);
           case TK_NUM: 
             for(int j = 0; j <= substr_len; j++) {
               tokens[cnt].str[j] = substr_start[j]; // save string
               if(j == substr_len) tokens[cnt].str[j] ='\0'; // clear
             }
-            
+          
           default: tokens[cnt].type = rules[i].token_type;
 
           // printf("HGHGH: 0x%x, %c\n", cnt, tokens[cnt].type);
