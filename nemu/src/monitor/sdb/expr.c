@@ -187,6 +187,7 @@ static bool make_token(char *e) {
           cnt++;
         }        
       }
+      break;
     }
 
     if (i == NR_REGEX) {
@@ -204,7 +205,7 @@ static bool make_token(char *e) {
     }
   }
 
-  
+
   return true;
 }
 
