@@ -175,7 +175,7 @@ static bool make_token(char *e) {
             tokens[cnt++].type = TK_NUM;
             free(tmp_str);
             break;
-          case TK_NUM: 
+          case TK_NUM: case TK_REG:
             for(int j = 0; j <= substr_len; j++) {
               tokens[cnt].str[j] = substr_start[j]; // save string
               if(j == substr_len) tokens[cnt].str[j] ='\0'; // clear
@@ -256,6 +256,9 @@ int eval(int p, int q) {
     assert(0);
   } 
   else if(p == q) {
+    if(tokens[p].type == TK_REG) {
+      return isa_reg_str2val(tokens[p].str, NULL);
+    }
     return atoi(tokens[p].str);
   }
   else if(check_parentheses(p, q) == true) {
