@@ -156,7 +156,7 @@ static bool make_token(char *e) {
         switch (rules[i].token_type) {
           case TK_NOTYPE: break;
           // to check if '*' is a multiplication or deref
-          case '*': if(is_operator(tokens[cnt - 1].type) || tokens[cnt - 1].type == '(') tokens[cnt++].type = TK_REF;break; 
+          // case '*': if(is_operator(tokens[cnt - 1].type) || tokens[cnt - 1].type == '(') tokens[cnt++].type = TK_REF;break; 
           case TK_HEX_NUM:
             // use tmp_str to cache the 0x1234 hex string 
             char* tmp_str = (char*)malloc(substr_len + 1);
@@ -196,6 +196,12 @@ static bool make_token(char *e) {
     }
   }
   // cnt = 0;
+
+  for (i = 0; i < cnt; i ++) {
+    if (tokens[i].type == '*' && (i == 0 || is_operator(tokens[cnt - 1].type) || tokens[cnt - 1].type == '(') ) {
+      tokens[i].type = TK_REF;
+    }
+  }
   return true;
 }
 
@@ -208,6 +214,8 @@ word_t expr(char *e, bool *success) {
 
   /* TODO: Insert codes to evaluate the expression. */
   // TODO();
+
+
   // save printed variables 
   variables[variable_count] = eval(0, cnt - 1);
   printf("$%d: %d\n", variable_count, variables[variable_count]);
