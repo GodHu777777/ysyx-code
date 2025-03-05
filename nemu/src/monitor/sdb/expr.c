@@ -186,6 +186,12 @@ static bool make_token(char *e) {
           cnt++;
         }
 
+
+        for (i = 0; i < cnt; i ++) {
+          if (tokens[i].type == '*' && (i == 0 || is_operator(tokens[cnt - 1].type) || tokens[cnt - 1].type == '(') ) {
+            tokens[i].type = TK_REF;
+          }
+        }
         break;
       }
     }
