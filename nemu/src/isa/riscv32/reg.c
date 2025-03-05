@@ -30,5 +30,22 @@ void isa_reg_display() {
 }
 
 word_t isa_reg_str2val(const char *s, bool *success) {
+  
+  // remove prefix $
+  char* tmp_s = (char*)malloc(strlen(s) + 3);
+  sprintf(tmp_s, "%s", s);
+
+  for(int i = 0;  i < strlen(s); i++ ){
+    tmp_s[i] = tmp_s[i + 1];
+    if(i == strlen(tmp_s) - 1) tmp_s[i] = '\0';
+  }
+
+  // try every register that match the name (s)
+  for(int i = 0; i < 0b11111; i++) {
+    if(!strcmp(tmp_s, regs[i])) {
+      return gpr(i);
+      break;
+    }
+  }
   return 0;
 }
