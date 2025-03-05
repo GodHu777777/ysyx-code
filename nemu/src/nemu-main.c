@@ -63,12 +63,12 @@ int main(int argc, char *argv[]) {
 
 
 
-    expr("1==1", NULL);
+    // expr("1==1", NULL);
   /* Start engine. */
   engine_start();
 
 
   
-
+  expr("*0x80000000", NULL);
   return is_exit_status_bad();
 }
