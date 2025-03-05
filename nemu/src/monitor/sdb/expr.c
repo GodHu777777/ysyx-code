@@ -58,6 +58,7 @@ static struct rule {
 
   // regex   token_type
   // {"-[0-9]+", TK_NUM},  // negative number
+  {"(0x)[0-9a-eA-E]+", TK_HEX_NUM}, // 0x1234
   {"[0-9]+", TK_NUM},   // number
   {" +", TK_NOTYPE},    // spaces
   {"\\+", '+'},         // plus
@@ -70,7 +71,6 @@ static struct rule {
   {"!=", TK_NEQ},       // not equal
   {"&&", TK_AND},       // and
   {"\\*", TK_REF},      // ref
-  {"(0x)[0-9a-eA-E]+", TK_HEX_NUM}, // 0x1234
   
   
 };
