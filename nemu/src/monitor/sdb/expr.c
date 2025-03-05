@@ -22,12 +22,16 @@
 // @hgh: to use "varibles"
 #include "sdb.h"
 
+// to scan memory(in deref)
+#include "memory/paddr.h"
+
+
 static bool make_token(char *);
 
 // @hgh: 
 
-// return true when ch is an operator, ch is a token
-bool is_operator(char ch);
+// return true when ch is an operator, ch is a token.type
+bool is_operator(int ch);
 
 // return true when the expression is surrounded by correct parentheses
 bool check_parentheses(int p, int q);
@@ -71,7 +75,7 @@ static struct rule {
   {"!=", TK_NEQ},       // not equal
   {"&&", TK_AND},       // and
   {"\\*", TK_REF},      // ref
-  {"$[0-9a-z]+", TK_REG},// register     
+  {"\\$[0-9a-z]+", TK_REG},// register     
   
   
 };
@@ -214,8 +218,8 @@ word_t expr(char *e, bool *success) {
   return 0;
 }
 
-bool is_operator(char ch) {
-  if(ch == '+' || ch == '-' || ch == '*' || ch == '/') return true;
+bool is_operator(int ch) {
+  if(ch == '+' || ch == '-' || ch == '*' || ch == '/' || ch == TK_EQ || ch == TK_NEQ || ch == TK_AND || ch == TK_REF) return true;
   return false;
 }
 
@@ -299,7 +303,10 @@ int eval(int p, int q) {
     if(tokens[op].type == '-') return eval(p, op - 1) - eval(op + 1, q); 
     if(tokens[op].type == '*') return eval(p, op - 1) * eval(op + 1, q);
     if(tokens[op].type == '/') return eval(p, op - 1) / eval(op + 1, q);
-
+    if(tokens[op].type == TK_EQ) return eval(p, op - 1) == eval(op + 1, q);
+    if(tokens[op].type == TK_NEQ) return eval(p, op - 1) != eval(op + 1, q);
+    if(tokens[op].type == TK_EQ) return eval(p, op - 1) && eval(op + 1, q);
+    if(tokens[op].type == TK_REF) return paddr_read(strtol(tokens[q].str, NULL, 16), 4); // q == p + 1
     Log("HGHGH: %d", op);
     // for compiler
     assert(0);   

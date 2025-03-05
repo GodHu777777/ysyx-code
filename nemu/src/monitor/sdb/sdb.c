@@ -18,6 +18,8 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "sdb.h"
+
+// to scan memory
 #include "memory/paddr.h"
 
 static int is_batch_mode = false;
@@ -70,10 +72,13 @@ static int cmd_info(char *args) {
   return 0;
 }
 
+// x [N] addr
+// e.g: x 10 0x'8000'0000
 static int cmd_x(char *args) {
   char *arg = strtok(NULL, " ");
   char *arg2 = strtok(NULL, " ");
   int n = atoi(arg);
+  // addr is the address to scan
   vaddr_t addr = strtol(arg2, NULL, 16);
 
   // vaddr_t addr = 
