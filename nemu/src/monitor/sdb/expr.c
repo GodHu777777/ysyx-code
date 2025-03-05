@@ -38,7 +38,7 @@ bool check_parentheses(int p, int q);
 
 // evaluate the expression from token p to q 
 // NOTE!: tokens must not contain any spaces
-int eval(int p, int q);
+uint32_t eval(int p, int q);
 
 // size of tokens
 int cnt = 0;
@@ -163,10 +163,10 @@ static bool make_token(char *e) {
             char* tmp_str = (char*)malloc(substr_len + 1);
             strncpy(tmp_str, substr_start, substr_len);
             
-            int value_in_decimal = strtol(tmp_str, NULL, 16);
+            unsigned long value_in_decimal = strtol(tmp_str, NULL, 16);
 
             // here tmp_str is used as decimal string
-            sprintf(tmp_str, "%d", value_in_decimal);
+            sprintf(tmp_str, "%ld", value_in_decimal);
 
             for(int j = 0; j <= strlen(tmp_str); j++) {
               tokens[cnt].str[j] = tmp_str[j]; // save string
@@ -175,7 +175,10 @@ static bool make_token(char *e) {
             tokens[cnt++].type = TK_NUM;
             free(tmp_str);
             break;
-          case TK_NUM: 
+          case TK_NUM: case TK_REG: 
+          // REG reuse the TK_NUM manipulate method,
+          // because they both need the tokens[].str
+          // to store the information(physically how they look like)
             for(int j = 0; j <= substr_len; j++) {
               tokens[cnt].str[j] = substr_start[j]; // save string
               if(j == substr_len) tokens[cnt].str[j] ='\0'; // clear
@@ -186,8 +189,9 @@ static bool make_token(char *e) {
           // printf("HGHGH: 0x%x, %c\n", cnt, tokens[cnt].type);
           cnt++;
         }        
+        break;
       }
-      // break;
+      
     }
 
     if (i == NR_REGEX) {
@@ -222,7 +226,7 @@ word_t expr(char *e, bool *success) {
 
   // save printed variables 
   variables[variable_count] = eval(0, cnt - 1);
-  printf("$%d: %d\n", variable_count, variables[variable_count]);
+  printf("$%d: %u\n", variable_count, variables[variable_count]);
   variable_count ++;
 
   // clear tokens
@@ -248,23 +252,29 @@ bool check_parentheses(int p, int q) {
 }
 
 // calculate the value of expression in [p, q]
-int eval(int p, int q) {
+uint32_t eval(int p, int q) {
   if(p > q) {
     Log("%d %d", p, q);
     // return;
     assert(0);
   } 
   else if(p == q) {
+    if(tokens[p].type == TK_REG) {
+      return isa_reg_str2val(tokens[p].str, NULL);
+    }
     return atoi(tokens[p].str);
   }
   else if(check_parentheses(p, q) == true) {
     return eval(p + 1, q - 1);
   }
   else {
+    // @hgh: PA1.3: added DEREF, the highest operator
+
     // to find the latest operator 
     // and calculate the result of the two sides of the operator
     // denote + or - as 1; * or / as 2
-    int priority = 2;
+    // @ DEREF as 3
+    int priority = 3;
     int op = -1;
 
     // find the operator with the lowest priority
@@ -272,7 +282,8 @@ int eval(int p, int q) {
     for(int i = p; i <= q; i++) {
       /* you need to specify the parentheses are totally over
        if one opretor is in a parentheses 
-       it is more prior than operator outside
+       it is more prior than operator outside 
+       and you don't need to take it into account 
       */
       if(tokens[i].type == '(') {
         int parent_count = 1;
@@ -283,6 +294,9 @@ int eval(int p, int q) {
           // printf("pa_ch: %d\n", i);
         }
       }
+      /*
+
+      */
       if(is_operator(tokens[i].type)) {
         Log("i: %d, token[i].type: %c", i, tokens[i].type);
         if(op == -1) { // first operator; do initialization
@@ -318,7 +332,8 @@ int eval(int p, int q) {
     if(tokens[op].type == TK_EQ) return eval(p, op - 1) == eval(op + 1, q);
     if(tokens[op].type == TK_NEQ) return eval(p, op - 1) != eval(op + 1, q);
     if(tokens[op].type == TK_EQ) return eval(p, op - 1) && eval(op + 1, q);
-    if(tokens[op].type == TK_REF) return paddr_read(strtol(tokens[q].str, NULL, 16), 4); // q == p + 1
+    //                                               set as 10 since value in tokens[].str is decimal
+    if(tokens[op].type == TK_REF) return paddr_read(strtol(tokens[q].str, NULL, 10), 4); // q == p + 1 a
     Log("HGHGH: %d", op);
     // for compiler
     assert(0);   
