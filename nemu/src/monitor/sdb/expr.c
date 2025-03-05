@@ -74,7 +74,7 @@ static struct rule {
   {"\\)", ')'},         // right parenthesis
   {"!=", TK_NEQ},       // not equal
   {"&&", TK_AND},       // and
-  {"\\*", TK_REF},      // ref
+  // {"\\*", TK_REF},      // ref
   {"\\$[0-9a-z]+", TK_REG},// register     
   
   
@@ -187,7 +187,7 @@ static bool make_token(char *e) {
           cnt++;
         }        
       }
-      break;
+      // break;
     }
 
     if (i == NR_REGEX) {
