@@ -153,8 +153,9 @@ static bool make_token(char *e) {
           // to check if '*' is a multiplication or deref
           case '*': if(is_operator(tokens[cnt - 1].type) || tokens[cnt - 1].type == '(') tokens[cnt].type = TK_REF;break; 
           case TK_HEX_NUM:
-            assert(0);
+            // assert(0);
             int value_in_decimal = strtol(substr_start, NULL, 16);
+            Log("%d", value_in_decimal);
             sprintf(substr_start, "%d", value_in_decimal);
           case TK_NUM: 
             for(int j = 0; j <= substr_len; j++) {
