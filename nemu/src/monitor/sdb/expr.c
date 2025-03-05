@@ -262,10 +262,13 @@ int eval(int p, int q) {
     return eval(p + 1, q - 1);
   }
   else {
+    // @hgh: PA1.3: added DEREF, the highest operator
+
     // to find the latest operator 
     // and calculate the result of the two sides of the operator
     // denote + or - as 1; * or / as 2
-    int priority = 2;
+    // @ DEREF as 3
+    int priority = 3;
     int op = -1;
 
     // find the operator with the lowest priority
@@ -273,7 +276,8 @@ int eval(int p, int q) {
     for(int i = p; i <= q; i++) {
       /* you need to specify the parentheses are totally over
        if one opretor is in a parentheses 
-       it is more prior than operator outside
+       it is more prior than operator outside 
+       and you don't need to take it into account 
       */
       if(tokens[i].type == '(') {
         int parent_count = 1;
@@ -284,6 +288,9 @@ int eval(int p, int q) {
           // printf("pa_ch: %d\n", i);
         }
       }
+      /*
+        
+      */
       if(is_operator(tokens[i].type)) {
         Log("i: %d, token[i].type: %c", i, tokens[i].type);
         if(op == -1) { // first operator; do initialization
