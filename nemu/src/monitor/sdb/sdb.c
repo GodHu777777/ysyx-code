@@ -50,6 +50,8 @@ static char* rl_gets() {
 }
 
 static int cmd_c(char *args) {
+  expr("*0x80000000", NULL);
+  
   cpu_exec(-1);
   return 0;
 }

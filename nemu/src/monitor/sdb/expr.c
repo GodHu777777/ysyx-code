@@ -326,7 +326,8 @@ int eval(int p, int q) {
     if(tokens[op].type == TK_EQ) return eval(p, op - 1) == eval(op + 1, q);
     if(tokens[op].type == TK_NEQ) return eval(p, op - 1) != eval(op + 1, q);
     if(tokens[op].type == TK_EQ) return eval(p, op - 1) && eval(op + 1, q);
-    if(tokens[op].type == TK_REF) return paddr_read(strtol(tokens[q].str, NULL, 10), 4); // q == p + 1
+    //                                               set as 10 since value in tokens[].str is decimal
+    if(tokens[op].type == TK_REF) return paddr_read(strtol(tokens[q].str, NULL, 10), 4); // q == p + 1 a
     Log("HGHGH: %d", op);
     // for compiler
     assert(0);   
