@@ -53,7 +53,7 @@ int main(int argc, char *argv[]) {
         }
 
         // expr(expression, NULL);
-        expr("0x1213+1", NULL);
+        expr("*0x80000000", NULL);
         printf("@1: %d\n", variable_count);
         assert(variables[variable_count - 1] == number);
     }
