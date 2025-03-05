@@ -57,7 +57,7 @@ static struct rule {
    */
 
   // regex   token_type
-  {"-[0-9]+", TK_NUM},  // negative number
+  // {"-[0-9]+", TK_NUM},  // negative number
   {"[0-9]+", TK_NUM},   // number
   {" +", TK_NOTYPE},    // spaces
   {"\\+", '+'},         // plus
