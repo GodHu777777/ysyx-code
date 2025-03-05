@@ -186,8 +186,9 @@ static bool make_token(char *e) {
           // printf("HGHGH: 0x%x, %c\n", cnt, tokens[cnt].type);
           cnt++;
         }        
+        break;
       }
-      break;
+      
     }
 
     if (i == NR_REGEX) {
