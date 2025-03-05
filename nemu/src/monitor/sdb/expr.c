@@ -163,10 +163,10 @@ static bool make_token(char *e) {
             char* tmp_str = (char*)malloc(substr_len + 1);
             strncpy(tmp_str, substr_start, substr_len);
             
-            unsigned int value_in_decimal = strtol(tmp_str, NULL, 16);
+            unsigned long value_in_decimal = strtol(tmp_str, NULL, 16);
 
             // here tmp_str is used as decimal string
-            sprintf(tmp_str, "%d", value_in_decimal);
+            sprintf(tmp_str, "%ld", value_in_decimal);
 
             for(int j = 0; j <= strlen(tmp_str); j++) {
               tokens[cnt].str[j] = tmp_str[j]; // save string
