@@ -163,7 +163,7 @@ static bool make_token(char *e) {
             char* tmp_str = (char*)malloc(substr_len + 1);
             strncpy(tmp_str, substr_start, substr_len);
             
-            int value_in_decimal = strtol(tmp_str, NULL, 16);
+            unsigned int value_in_decimal = strtol(tmp_str, NULL, 16);
 
             // here tmp_str is used as decimal string
             sprintf(tmp_str, "%d", value_in_decimal);
@@ -289,7 +289,7 @@ int eval(int p, int q) {
         }
       }
       /*
-        
+
       */
       if(is_operator(tokens[i].type)) {
         Log("i: %d, token[i].type: %c", i, tokens[i].type);
