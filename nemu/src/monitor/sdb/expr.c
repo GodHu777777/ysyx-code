@@ -40,7 +40,7 @@ int eval(int p, int q);
 int cnt = 0;
 
 enum {
-  TK_NOTYPE = 256, TK_EQ,
+  TK_NOTYPE = 256, TK_EQ,TK_NEQ, TK_AND,TK_REF,TK_HEX_NUM,TK_REG,
 
   /* TODO: Add more token types */
   TK_NUM
@@ -67,7 +67,10 @@ static struct rule {
   {"\\/", '/'},         // divise
   {"\\(", '('},         // left parenthesis
   {"\\)", ')'},         // right parenthesis
-  
+  {"!=", TK_NEQ},       // not equal
+  {"&&", TK_AND},       // and
+  {"\\*", TK_REF},      // ref
+  {"(0x)[0-9a-eA-E]+", TK_HEX_NUM}, // 0x1234
   
   
 };
