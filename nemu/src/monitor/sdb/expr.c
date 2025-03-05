@@ -150,6 +150,8 @@ static bool make_token(char *e) {
 
         switch (rules[i].token_type) {
           case TK_NOTYPE: break;
+          // to check if '*' is a multiplication or deref
+          case '*': if(is_operator(tokens[cnt - 1].type) || tokens[cnt - 1].type == '(') tokens[cnt].type = TK_REF;break; 
           case TK_NUM: 
             for(int j = 0; j <= substr_len; j++) {
               tokens[cnt].str[j] = substr_start[j]; // save string
