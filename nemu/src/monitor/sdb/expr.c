@@ -74,7 +74,7 @@ static struct rule {
   {"\\)", ')'},         // right parenthesis
   {"!=", TK_NEQ},       // not equal
   {"&&", TK_AND},       // and
-  // {"\\*", TK_REF},      // ref
+  {"\\*", TK_REF},      // ref
   {"\\$[0-9a-z]+", TK_REG},// register     
   
   
@@ -135,10 +135,9 @@ static bool make_token(char *e) {
 
   while (e[position] != '\0') {
     /* Try all rules one by one. */
-    // @hgh: each i represents each rule
+    // @hgh: each i represents each 
     for (i = 0; i < NR_REGEX; i ++) {
       // assert(0);
-      //try every rule
       if (regexec(&re[i], e + position, 1, &pmatch, 0) == 0 && pmatch.rm_so == 0) {
         // assert(0);
         char *substr_start = e + position;
@@ -185,9 +184,10 @@ static bool make_token(char *e) {
 
           // printf("HGHGH: 0x%x, %c\n", cnt, tokens[cnt].type);
           cnt++;
-        }        
+        }
+
+        break;
       }
-      // break;
     }
 
     if (i == NR_REGEX) {
@@ -197,15 +197,11 @@ static bool make_token(char *e) {
   }
   // cnt = 0;
 
-  
-
   for (i = 0; i < cnt; i ++) {
     if (tokens[i].type == '*' && (i == 0 || is_operator(tokens[cnt - 1].type) || tokens[cnt - 1].type == '(') ) {
       tokens[i].type = TK_REF;
     }
   }
-
-
   return true;
 }
 
