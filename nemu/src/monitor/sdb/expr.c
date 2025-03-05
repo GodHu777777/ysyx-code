@@ -170,7 +170,7 @@ static bool make_token(char *e) {
               if(j == substr_len) tokens[cnt].str[j] ='\0'; // clear
             }
           
-          default: tokens[cnt].type = rules[i].token_type;
+          default: tokens[cnt].type = rules[i].token_type; Log("%c", tokens[cnt].type);
 
           // printf("HGHGH: 0x%x, %c\n", cnt, tokens[cnt].type);
           cnt++;
