@@ -19,7 +19,14 @@
 #include <readline/history.h>
 #include "sdb.h"
 
+// to scan memory
+#include "memory/paddr.h"
+
 static int is_batch_mode = false;
+
+// hgh: for print expression and saves values
+int variable_count = 0;
+int variables[10010];
 
 void init_regex();
 void init_wp_pool();
@@ -49,7 +56,42 @@ static int cmd_c(char *args) {
 
 
 static int cmd_q(char *args) {
+  nemu_state.state = NEMU_QUIT;
   return -1;
+}
+
+// todo
+static int cmd_si(char *args) {
+  if(args) cpu_exec(args[0] - 0x30);
+  else cpu_exec(1);
+  return 0;
+}
+
+static int cmd_info(char *args) {
+  isa_reg_display();
+  return 0;
+}
+
+// x [N] addr
+// e.g: x 10 0x'8000'0000
+static int cmd_x(char *args) {
+  char *arg = strtok(NULL, " ");
+  char *arg2 = strtok(NULL, " ");
+  int n = atoi(arg);
+  // addr is the address to scan
+  vaddr_t addr = strtol(arg2, NULL, 16);
+
+  // vaddr_t addr = 
+  for(int i = 0; i < n; i++) {
+    printf("[0x%8x]: %8x\n", addr, paddr_read(addr, 4));
+    addr += 4;
+  }
+  return 0; 
+}
+
+static int cmd_p(char *args) {
+  expr(args, NULL);
+  return 0; 
 }
 
 static int cmd_help(char *args);
@@ -65,6 +107,10 @@ static struct {
 
   /* TODO: Add more commands */
 
+  {"si", "single step", cmd_si},
+  {"info", "print information", cmd_info},
+  {"x", "scan memory", cmd_x},
+  {"p", "print expression value", cmd_p},
 };
 
 #define NR_CMD ARRLEN(cmd_table)
@@ -97,6 +143,7 @@ void sdb_set_batch_mode() {
 }
 
 void sdb_mainloop() {
+  // don't read
   if (is_batch_mode) {
     cmd_c(NULL);
     return;
