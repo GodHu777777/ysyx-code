@@ -154,10 +154,12 @@ static bool make_token(char *e) {
           case '*': if(is_operator(tokens[cnt - 1].type) || tokens[cnt - 1].type == '(') tokens[cnt].type = TK_REF;break; 
           case TK_HEX_NUM:
             // assert(0);
-            Log("[DEBUG]: substr: %s %d", substr_start, substr_len);
-            int value_in_decimal = strtol(substr_start, NULL, 16);
+            // Log("[DEBUG]: substr: %s %d", substr_start, substr_len);
+            char* tmp_str = "\0";
+            strncpy(tmp_str, substr_start, substr_len);
+            int value_in_decimal = strtol(tmp_str, NULL, 16);
             Log("%d", value_in_decimal);
-            sprintf(substr_start, "%d", value_in_decimal);
+            // sprintf(substr_start, "%d", value_in_decimal);
           case TK_NUM: 
             for(int j = 0; j <= substr_len; j++) {
               tokens[cnt].str[j] = substr_start[j]; // save string
