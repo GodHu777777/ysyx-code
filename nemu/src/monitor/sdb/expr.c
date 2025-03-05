@@ -161,7 +161,7 @@ static bool make_token(char *e) {
               tokens[cnt].str[j] = tmp_str[j]; // save string
               if(j == substr_len) tokens[cnt].str[j] ='\0'; // clear
             }
-
+            
             free(tmp_str);
             break;
           case TK_NUM: 
