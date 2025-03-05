@@ -63,7 +63,7 @@ int main(int argc, char *argv[]) {
 
 
 
-    expr("1==2", NULL);
+    expr("1==1", NULL);
   /* Start engine. */
   engine_start();
 
