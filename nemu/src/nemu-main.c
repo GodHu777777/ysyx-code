@@ -31,9 +31,9 @@ int main(int argc, char *argv[]) {
     // ----------------- expr test
     FILE *fp;
     char *filename = "/home/ghhu/Desktop/study/ysyx-workbench/nemu/src/input";
-    char line[256]; // 假设每行不超过255个字符，可以根据实际情况调整
+    char line[65536]; // 假设每行不超过255个字符，可以根据实际情况调整
     int number;
-    char expression[256]; // 假设表达式部分也不超过255个字符
+    char expression[65536]; // 假设表达式部分也不超过255个字符
 
     fp = fopen(filename, "r");
     if (fp == NULL) {
