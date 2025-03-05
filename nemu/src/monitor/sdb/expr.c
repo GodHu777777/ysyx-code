@@ -151,7 +151,7 @@ static bool make_token(char *e) {
         switch (rules[i].token_type) {
           case TK_NOTYPE: break;
           // to check if '*' is a multiplication or deref
-          case '*': if(is_operator(tokens[cnt - 1].type) || tokens[cnt - 1].type == '(') tokens[cnt].type = TK_REF;break; 
+          case '*': if(is_operator(tokens[cnt - 1].type) || tokens[cnt - 1].type == '(') tokens[cnt++].type = TK_REF;break; 
           case TK_HEX_NUM:
             char* tmp_str = (char*)malloc(substr_len + 1);
             strncpy(tmp_str, substr_start, substr_len);
@@ -161,7 +161,7 @@ static bool make_token(char *e) {
               tokens[cnt].str[j] = tmp_str[j]; // save string
               if(j == substr_len) tokens[cnt].str[j] ='\0'; // clear
             }
-            tokens[cnt].type = TK_NUM;
+            tokens[cnt++].type = TK_NUM;
             free(tmp_str);
             break;
           case TK_NUM: 
