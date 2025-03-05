@@ -157,7 +157,7 @@ static bool make_token(char *e) {
             strncpy(tmp_str, substr_start, substr_len);
             int value_in_decimal = strtol(tmp_str, NULL, 16);
             sprintf(tmp_str, "%d", value_in_decimal);
-            for(int j = 0; j <= substr_len; j++) {
+            for(int j = 0; j <= strlen(tmp_str); j++) {
               tokens[cnt].str[j] = tmp_str[j]; // save string
               if(j == substr_len) tokens[cnt].str[j] ='\0'; // clear
             }
