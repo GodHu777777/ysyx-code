@@ -69,6 +69,6 @@ int main(int argc, char *argv[]) {
 
 
   
-  expr("*0x80000000", NULL);
+  expr("0x80000000", NULL);
   return is_exit_status_bad();
 }
