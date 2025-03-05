@@ -71,6 +71,7 @@ static struct rule {
   {"!=", TK_NEQ},       // not equal
   {"&&", TK_AND},       // and
   {"\\*", TK_REF},      // ref
+  {"$[0-9a-z]+", TK_REG},// register     
   
   
 };
@@ -153,10 +154,15 @@ static bool make_token(char *e) {
           // to check if '*' is a multiplication or deref
           case '*': if(is_operator(tokens[cnt - 1].type) || tokens[cnt - 1].type == '(') tokens[cnt++].type = TK_REF;break; 
           case TK_HEX_NUM:
+            // use tmp_str to cache the 0x1234 hex string 
             char* tmp_str = (char*)malloc(substr_len + 1);
             strncpy(tmp_str, substr_start, substr_len);
+            
             int value_in_decimal = strtol(tmp_str, NULL, 16);
+
+            // here tmp_str is used as decimal string
             sprintf(tmp_str, "%d", value_in_decimal);
+
             for(int j = 0; j <= strlen(tmp_str); j++) {
               tokens[cnt].str[j] = tmp_str[j]; // save string
               if(j == substr_len) tokens[cnt].str[j] ='\0'; // clear
