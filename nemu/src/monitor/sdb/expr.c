@@ -187,9 +187,9 @@ static bool make_token(char *e) {
         }
 
 
-        for (i = 0; i < cnt; i ++) {
-          if (tokens[i].type == '*' && (i == 0 || is_operator(tokens[cnt - 1].type) || tokens[cnt - 1].type == '(') ) {
-            tokens[i].type = TK_REF;
+        for (int j = 0; j < cnt; j ++) {
+          if (tokens[j].type == '*' && (j == 0 || is_operator(tokens[cnt - 1].type) || tokens[cnt - 1].type == '(') ) {
+            tokens[j].type = TK_REF;
           }
         }
         break;
