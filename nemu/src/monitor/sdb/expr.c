@@ -154,6 +154,7 @@ static bool make_token(char *e) {
           case '*': if(is_operator(tokens[cnt - 1].type) || tokens[cnt - 1].type == '(') tokens[cnt].type = TK_REF;break; 
           case TK_HEX_NUM:
             // assert(0);
+            Log("%s", substr_start);
             int value_in_decimal = strtol(substr_start, NULL, 16);
             Log("%d", value_in_decimal);
             sprintf(substr_start, "%d", value_in_decimal);
