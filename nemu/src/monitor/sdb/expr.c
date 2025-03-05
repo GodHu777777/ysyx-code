@@ -38,7 +38,7 @@ bool check_parentheses(int p, int q);
 
 // evaluate the expression from token p to q 
 // NOTE!: tokens must not contain any spaces
-int eval(int p, int q);
+uint32_t eval(int p, int q);
 
 // size of tokens
 int cnt = 0;
@@ -175,7 +175,10 @@ static bool make_token(char *e) {
             tokens[cnt++].type = TK_NUM;
             free(tmp_str);
             break;
-          case TK_NUM: case TK_REG:
+          case TK_NUM: case TK_REG: 
+          // REG reuse the TK_NUM manipulate method,
+          // because they both need the tokens[].str
+          // to store the information(physically how they look like)
             for(int j = 0; j <= substr_len; j++) {
               tokens[cnt].str[j] = substr_start[j]; // save string
               if(j == substr_len) tokens[cnt].str[j] ='\0'; // clear
@@ -249,7 +252,7 @@ bool check_parentheses(int p, int q) {
 }
 
 // calculate the value of expression in [p, q]
-int eval(int p, int q) {
+uint32_t eval(int p, int q) {
   if(p > q) {
     Log("%d %d", p, q);
     // return;
