@@ -226,7 +226,7 @@ word_t expr(char *e, bool *success) {
 
   // save printed variables 
   variables[variable_count] = eval(0, cnt - 1);
-  printf("$%ud: %d\n", variable_count, variables[variable_count]);
+  printf("$%d: %ud\n", variable_count, variables[variable_count]);
   variable_count ++;
 
   // clear tokens
