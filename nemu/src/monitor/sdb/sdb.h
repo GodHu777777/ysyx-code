@@ -24,3 +24,5 @@ word_t expr(char *e, bool *success);
 
 extern int variable_count;
 extern int variables[10010];
+
+void debug_func_wp();
