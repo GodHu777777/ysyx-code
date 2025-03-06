@@ -214,6 +214,9 @@ static bool make_token(char *e) {
 }
 
 
+// most used api for other files want to 
+// calculate expression
+// e is the expr and return a word_t size value
 word_t expr(char *e, bool *success) {
   if (!make_token(e)) {
     *success = false;
