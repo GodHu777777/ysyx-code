@@ -24,8 +24,5 @@ word_t expr(char *e, bool *success);
 
 extern int variable_count;
 extern int variables[10010];
-<<<<<<< HEAD
-=======
 
 void debug_func_wp();
->>>>>>> tracer-ysyx

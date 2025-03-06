@@ -66,12 +66,7 @@ int main(int argc, char *argv[]) {
     // expr("1==1", NULL);
   /* Start engine. */
   engine_start();
-
-<<<<<<< HEAD
-
-=======
   
->>>>>>> tracer-ysyx
   
   return is_exit_status_bad();
 }

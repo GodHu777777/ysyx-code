@@ -29,13 +29,14 @@ typedef struct watchpoint {
 
 static WP wp_pool[NR_WP] = {};
 
-static WP init_node = {
-  .NO = -1,
-  .next = NULL,
-  .wp_expr = NULL 
-};
+// static WP init_node = {
+//   .NO = -1,
+//   .next = NULL,
+//   .wp_expr = NULL 
+// };
 
-static WP *head = &init_node, *free_ = &init_node;
+static WP *head = NULL, *free_ = NULL;
+
 
 WP* new_wp();
 void free_wp(WP *wp);
@@ -54,14 +55,19 @@ void init_wp_pool() {
   */ 
 
   // use head and free_ as sentinel
-  head->next = NULL;
-  free_->next = wp_pool;
+  head = NULL;
+  free_ = wp_pool;
 
   /*
   after here, 
     it be like :
-    head -> NULL
-    free_ ->  0->1->2->3->...->n-1->NULL
+    head 
+     ||
+    NULL
+
+    free_ 
+     ||
+      0  -> 1->2->3->...->n-1->NULL
   */
 }
 
@@ -79,25 +85,27 @@ WP* new_wp() {
   // no availiable watchpoint node
   if(free_->next == NULL) assert(0);
 
-  WP* wp1 = free_->next; // Definition: WP *free_ = NULL, free_ is already an address
-
-  if(head->next == NULL) {
-    head->next = wp1;
-    free_->next = free_->next->next;
-    return wp1;
+  // if head is just NULL, place the first node of free_ into head list
+  if(head == NULL) {
+    head = free_;
+    free_ = free_->next;
+    head->next = NULL;
+    return head;
   }
 
-  if(free_->next != NULL) {
-    // use wp1 to cache the first node after head
-    wp1 = head->next;
-    head->next = free_->next;
-    head->next->next = wp1;
+  WP* wp1 = head; // Definition: WP *free_ = NULL, free_ is already an address
 
-    // delete the newed node from free_ linklist
-    free_->next = free_->next->next;
+  // if head is not NULL, find the one to last node
+  while(wp1->next != NULL) {
+    wp1 = wp1->next;
   }
-  
-  return head->next;
+
+  // now wp1 is the one to last node
+  wp1->next = free_;
+  free_ = free_->next;
+  wp1->next->next = NULL;
+
+  return wp1->next;
   
 } 
 
@@ -107,6 +115,15 @@ void free_wp(WP *wp) {
   // to find where it is
 
   WP* wp1 = head;
+  
+  // if head list only has one member
+  if(head->next == NULL) {
+    wp1 = free_->next->next;
+    free_->next = head->next;
+    
+  }
+
+  // loop to find the node before target wp
   while(wp1->next != NULL) {
     if(wp1->next->NO == wp->NO) {
       // step into here means the wp found
@@ -115,10 +132,16 @@ void free_wp(WP *wp) {
       // delete wp node from head
       wp1->next = wp1->next->next;
 
+      //cache first node of free_ list
+      wp1->next = free_;
+      free_ = wp1;
       // add wp into free_ and as the first node
-      wp->next = free_->next->next;
-      free_->next = wp;
+      // wp->next = free_->next;
+      // free_ = wp;
+      break;
     }
+
+    wp1 = wp1->next;
   }
 }
 
@@ -135,9 +158,21 @@ void debug_func_wp() {
   print_linklist(head);
   print_linklist(free_);
 
+  
+  WP* wp0 = new_wp();
   WP* wp1 = new_wp();
-  print_linklist(head);
-  print_linklist(free_);
+  free_wp(wp1);
+  
+  WP* wp2 = new_wp();
+  WP* wp3 = new_wp();
+  printf("HEAD: ");print_linklist(head);
+  printf("free_: ");print_linklist(free_);
+
+  free_wp(wp3);
+  printf("HEAD after freed: ");print_linklist(head);
+  printf("free_ after freed: ");print_linklist(free_);
 
   printf("%d", wp1->NO);
+  free(wp2);free(wp3);free(wp0);
+  
 }
