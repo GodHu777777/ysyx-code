@@ -68,7 +68,16 @@ WP* new_wp() {
   //   }
   // }
 
-  WP* wp1 = free_; // Definition: WP *free_ = NULL, free_ is already an address
+  // no availiable watchpoint node
+  if(free_->next == NULL) assert(0);
+
+  WP* wp1 = free_->next; // Definition: WP *free_ = NULL, free_ is already an address
+
+  if(head->next == NULL) {
+    head->next = wp1;
+    free_->next = free_->next->next;
+    return wp1;
+  }
 
   if(free_->next != NULL) {
     // use wp1 to cache the first node after head
@@ -81,8 +90,7 @@ WP* new_wp() {
   }
   
   return head->next;
-  // no availiable watchpoint node
-  assert(0);
+  
 } 
 
 void free_wp(WP *wp) {
