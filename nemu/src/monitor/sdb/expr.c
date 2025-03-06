@@ -214,6 +214,9 @@ static bool make_token(char *e) {
 }
 
 
+// most used api for other files want to 
+// calculate expression
+// e is the expr and return a word_t size value
 word_t expr(char *e, bool *success) {
   if (!make_token(e)) {
     *success = false;
@@ -226,7 +229,7 @@ word_t expr(char *e, bool *success) {
 
   // save printed variables 
   variables[variable_count] = eval(0, cnt - 1);
-  printf("$%d: %ud\n", variable_count, variables[variable_count]);
+  printf("$%d: %u\n", variable_count, variables[variable_count]);
   variable_count ++;
 
   // clear tokens
