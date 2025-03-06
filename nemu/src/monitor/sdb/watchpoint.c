@@ -54,8 +54,8 @@ void init_wp_pool() {
   */ 
 
   // use head and free_ as sentinel
-  head->NO = -1; head->next = NULL;
-  free_->NO = -1; free_->next = wp_pool;
+  head->next = NULL;
+  free_->next = wp_pool;
 
   /*
   after here, 
