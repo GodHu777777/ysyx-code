@@ -26,3 +26,6 @@ extern int variable_count;
 extern int variables[10010];
 
 void debug_func_wp();
+bool scan_watchpoints();
+void print_watchpoints();
+WP* create_watchpoint(char* e);

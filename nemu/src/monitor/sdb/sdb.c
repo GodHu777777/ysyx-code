@@ -68,7 +68,8 @@ static int cmd_si(char *args) {
 }
 
 static int cmd_info(char *args) {
-  isa_reg_display();
+  if(strcmp(args, "r") == 0) isa_reg_display();
+  else print_watchpoints();
   return 0;
 }
 
@@ -94,6 +95,10 @@ static int cmd_p(char *args) {
   return 0; 
 }
 
+static int cmd_w(char *args) {
+  create_watchpoint(args);
+}
+
 static int cmd_help(char *args);
 
 static struct {
@@ -111,6 +116,7 @@ static struct {
   {"info", "print information", cmd_info},
   {"x", "scan memory", cmd_x},
   {"p", "print expression value", cmd_p},
+  {"w", "set watchpoint", cmd_w},
 };
 
 #define NR_CMD ARRLEN(cmd_table)

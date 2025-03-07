@@ -25,29 +25,45 @@ typedef struct watchpoint {
 
   // bool is_free;
   char* wp_expr;
+  int wp_value;
+  bool disp;
 } WP;
 
 static WP wp_pool[NR_WP] = {};
 
-// static WP init_node = {
-//   .NO = -1,
-//   .next = NULL,
-//   .wp_expr = NULL 
-// };
+static WP head_sentinel = {
+  .NO = -1,
+  .next = NULL,
+  .wp_expr = NULL 
+};
 
-static WP *head = NULL, *free_ = NULL;
+static WP free_sentinel = {
+  .NO = -1,
+  .next = NULL,
+  .wp_expr = NULL 
+};
+
+static WP *head = &head_sentinel, *free_ = &free_sentinel;
 
 
 WP* new_wp();
 void free_wp(WP *wp);
 
+// e here is expression to be watched
+WP* create_watchpoint(char* e);
+
+bool scan_watchpoints();
+
 void debug_func_wp();
 
 void init_wp_pool() {
+  head = &head_sentinel;
+  free_ = &free_sentinel;
   int i;
   for (i = 0; i < NR_WP; i ++) {
     wp_pool[i].NO = i;
     wp_pool[i].next = (i == NR_WP - 1 ? NULL : &wp_pool[i + 1]);
+    wp_pool[i].disp = 1;
     // wp_pool[i].is_free = 1; // init as free state
   }
   /* after for loop, 
@@ -55,19 +71,17 @@ void init_wp_pool() {
   */ 
 
   // use head and free_ as sentinel
-  head = NULL;
-  free_ = wp_pool;
+  // head->NO = -1; 
+  head->next = NULL;
+  // free_->NO = -1; 
+  free_->next = wp_pool;
 
   /*
   after here, 
     it be like :
-    head 
-     ||
-    NULL
-
-    free_ 
-     ||
-      0  -> 1->2->3->...->n-1->NULL
+    head -> NULL 
+    
+    free_ -> 0-> 1->2->3->...->n-1->NULL
   */
 }
 
@@ -76,38 +90,19 @@ void init_wp_pool() {
 // idea: use the first element in free_ linklist, 
 // and save it as first element in head linklist
 WP* new_wp() {
-  // for(int i = 0; i < NR_WP; i++) {
-  //   if(wp_pool[i].is_free == 1) {
-  //     return &wp_pool[i];
-  //   }
-  // }
 
   // no availiable watchpoint node
   if(free_->next == NULL) assert(0);
 
-  // if head is just NULL, place the first node of free_ into head list
-  if(head == NULL) {
-    head = free_;
-    free_ = free_->next;
-    head->next = NULL;
-    return head;
-  }
+  WP* wp1 = free_->next;
+  free_->next = free_->next->next;
+  wp1->next = head->next;
+  head->next = wp1;
 
-  WP* wp1 = head; // Definition: WP *free_ = NULL, free_ is already an address
-
-  // if head is not NULL, find the one to last node
-  while(wp1->next != NULL) {
-    wp1 = wp1->next;
-  }
-
-  // now wp1 is the one to last node
-  wp1->next = free_;
-  free_ = free_->next;
-  wp1->next->next = NULL;
-
-  return wp1->next;
-  
+  return wp1;
 } 
+
+
 
 void free_wp(WP *wp) {
   // wp is already a node in head linklist
@@ -116,13 +111,7 @@ void free_wp(WP *wp) {
 
   WP* wp1 = head;
   
-  // if head list only has one member
-  if(head->next == NULL) {
-    wp1 = free_->next->next;
-    free_->next = head->next;
-    
-  }
-
+  bool is_found = 0;
   // loop to find the node before target wp
   while(wp1->next != NULL) {
     if(wp1->next->NO == wp->NO) {
@@ -133,19 +122,45 @@ void free_wp(WP *wp) {
       wp1->next = wp1->next->next;
 
       //cache first node of free_ list
-      wp1->next = free_;
-      free_ = wp1;
+      wp->next = free_->next;
+      free_->next = wp;
       // add wp into free_ and as the first node
       // wp->next = free_->next;
       // free_ = wp;
+
+      is_found = 1;
       break;
     }
 
     wp1 = wp1->next;
   }
+
+  if(!is_found) assert(0); // not founded
+}
+
+
+// show current watchpoints
+void print_watchpoints() {
+  if(head->next == NULL) {
+    printf("No watchpoints.\n");
+    return;
+  }else {
+    printf("NUM Disp  What\n");
+  }
+
+  WP* wp1 = head->next;
+  while (wp1->next != NULL)
+  {
+    char* my_disp = wp1->disp ? "keep" : "del";
+
+    printf("%-3d %-4s  %s\n", wp1->NO, my_disp, wp1->wp_expr);
+    wp1 = wp1->next;
+  }
+  
 }
 
 void print_linklist(WP* wp) {
+  wp = wp->next;
   while (wp != NULL)
   {
     printf("->%d", wp->NO);
@@ -158,21 +173,58 @@ void debug_func_wp() {
   print_linklist(head);
   print_linklist(free_);
 
-  
-  WP* wp0 = new_wp();
-  WP* wp1 = new_wp();
+  WP* wp0 = create_watchpoint("1 + 2");
+  WP* wp1 = create_watchpoint("$t0");
   free_wp(wp1);
+  WP* wp2 = create_watchpoint("$t0");
+  WP* wp3 = create_watchpoint("$t0");
   
-  WP* wp2 = new_wp();
-  WP* wp3 = new_wp();
+  
   printf("HEAD: ");print_linklist(head);
   printf("free_: ");print_linklist(free_);
+  
+  printf("HEAD after freed: ");print_linklist(head);
+  printf("free_ after freed: ");print_linklist(free_);
 
   free_wp(wp3);
   printf("HEAD after freed: ");print_linklist(head);
   printf("free_ after freed: ");print_linklist(free_);
 
-  printf("%d", wp1->NO);
-  free(wp2);free(wp3);free(wp0);
   
+  printf("%d", wp0->NO);
+  printf("%s", head->next->next->wp_expr);
+  printf("%d", wp2->NO);
+  // printf("%d", wp3->NO);
+  
+  
+}
+
+// api for other files who want to create wp
+WP* create_watchpoint(char* e) {
+  WP* wp1 = new_wp();
+  wp1->wp_expr = e; 
+  wp1->wp_value = expr(e, NULL);
+  return wp1;
+}
+
+// return 1 when expr modified
+bool scan_watchpoints() {
+
+  WP* wp1 = head;
+
+  // check all nodes in head list
+  while(wp1->next != NULL) {
+    if(wp1 == head) {wp1=wp1->next; continue;}
+
+    uint32_t cur_value = expr(wp1->wp_expr, NULL);
+    if(cur_value != wp1->wp_value) {
+      // assert(0);
+
+      printf("[watchpoint]: encounter wp%d of \"%s\"\n", wp1->NO, wp1->wp_expr);
+      return 1;
+    }
+    wp1 = wp1->next; 
+  } 
+
+  return 0;
 }
