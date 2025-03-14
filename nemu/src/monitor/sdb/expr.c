@@ -62,7 +62,7 @@ static struct rule {
 
   // regex   token_type
   // {"-[0-9]+", TK_NUM},  // negative number
-  {"(0x)[0-9a-eA-E]+", TK_HEX_NUM}, // 0x1234
+  {"(0x)[0-9a-fA-F]+", TK_HEX_NUM}, // 0x1234
   {"[0-9]+", TK_NUM},   // number
   {" +", TK_NOTYPE},    // spaces
   {"\\+", '+'},         // plus
@@ -144,8 +144,8 @@ static bool make_token(char *e) {
         char *substr_start = e + position;
         int substr_len = pmatch.rm_eo;
 
-        Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
-            i, rules[i].regex, position, substr_len, substr_len, substr_start);
+        // Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
+            // i, rules[i].regex, position, substr_len, substr_len, substr_start);
         // printf("%.*s\n",substr_len, substr_start);
         position += substr_len;
 
@@ -184,7 +184,7 @@ static bool make_token(char *e) {
               if(j == substr_len) tokens[cnt].str[j] ='\0'; // clear
             }
           
-          default: tokens[cnt].type = rules[i].token_type; Log("AAA: %c", tokens[cnt].type);
+          default: tokens[cnt].type = rules[i].token_type;// Log("AAA: %c", tokens[cnt].type);
 
           // printf("HGHGH: 0x%x, %c\n", cnt, tokens[cnt].type);
           cnt++;
@@ -230,7 +230,7 @@ word_t expr(char *e, bool *success) {
 
   // save printed variables 
   variables[variable_count] = eval(0, cnt - 1);
-  printf("[expr.c]: $%d: %u\n", variable_count, variables[variable_count]);
+  printf("[expr.c]: $%d: 0x%x\n", variable_count, variables[variable_count]);
   variable_count ++;
 
   // clear tokens
@@ -302,10 +302,10 @@ uint32_t eval(int p, int q) {
 
       */
       if(is_operator(tokens[i].type)) {
-        Log("i: %d, token[i].type: %c", i, tokens[i].type);
+        // Log("i: %d, token[i].type: %c", i, tokens[i].type);
         if(op == -1) { // first operator; do initialization
           op = i; 
-          Log("BEGIN op: %d; i: %d", tokens[op].type, i);
+          // Log("BEGIN op: %d; i: %d", tokens[op].type, i);
           if(tokens[i].type == '+' || tokens[i].type == '-') priority = 1;
           else priority = 2;
         }
@@ -323,12 +323,12 @@ uint32_t eval(int p, int q) {
           }
         }
 
-        Log("@@@@ %d, %c", op, tokens[op].type);
+        // Log("@@@@ %d, %c", op, tokens[op].type);
       }
       // Log("@@@@ QAQ %d, %d", op, i);
     }
     
-
+    if(tokens[op].type == TK_AND) return eval(p, op - 1) && eval(op + 1, q);
     if(tokens[op].type == '+') return eval(p, op - 1) + eval(op + 1, q);
     if(tokens[op].type == '-') return eval(p, op - 1) - eval(op + 1, q); 
     if(tokens[op].type == '*') return eval(p, op - 1) * eval(op + 1, q);

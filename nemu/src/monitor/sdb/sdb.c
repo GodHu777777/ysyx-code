@@ -96,7 +96,18 @@ static int cmd_p(char *args) {
 }
 
 static int cmd_w(char *args) {
-  create_watchpoint(args);
+  char* s = (char*)malloc(20);
+  sprintf(s, "%s", args);
+  Log("Hi: %s", s);
+  create_watchpoint(s);
+  
+  return 0;
+}
+
+static int cmd_d(char* args) {
+  int no = strtol(args, NULL, 10);
+  delete_watchpoint(no);
+  return 0;
 }
 
 static int cmd_help(char *args);
@@ -117,6 +128,7 @@ static struct {
   {"x", "scan memory", cmd_x},
   {"p", "print expression value", cmd_p},
   {"w", "set watchpoint", cmd_w},
+  {"d", "delete watchpoint", cmd_d},
 };
 
 #define NR_CMD ARRLEN(cmd_table)
@@ -195,5 +207,5 @@ void init_sdb() {
   init_wp_pool();
 
   // for linklist test
-  debug_func_wp();
+  // debug_func_wp();
 }

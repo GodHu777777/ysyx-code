@@ -51,26 +51,38 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 }
 
 static void exec_once(Decode *s, vaddr_t pc) {
+  // what is s?
   s->pc = pc;
   s->snpc = pc;
   isa_exec_once(s);
   cpu.pc = s->dnpc;
 #ifdef CONFIG_ITRACE
+  // p is the pointer to the end of logbuf
+  // works like a write pointer
   char *p = s->logbuf;
-  p += snprintf(p, sizeof(s->logbuf), FMT_WORD ":", s->pc);
+
+  // print instruction address in hex
+  //                                  "0x%08x:   " 
+  p += snprintf(p, sizeof(s->logbuf), FMT_WORD ":", s->pc); 
   int ilen = s->snpc - s->pc;
   int i;
+  // wtf this line doing??? inst is for what???
   uint8_t *inst = (uint8_t *)&s->isa.inst;
+
+  // print the instruction content in hex
 #ifdef CONFIG_ISA_x86
   for (i = 0; i < ilen; i ++) {
 #else
   for (i = ilen - 1; i >= 0; i --) {
 #endif
+    //  4 is safe guard
     p += snprintf(p, 4, " %02x", inst[i]);
   }
   int ilen_max = MUXDEF(CONFIG_ISA_x86, 8, 4);
   int space_len = ilen_max - ilen;
   if (space_len < 0) space_len = 0;
+  // why multiply by 3? since each hex number is 2 char + 1 space
+  // like 00 00 01 43 // if your instruction less than it, one less, one 3
   space_len = space_len * 3 + 1;
   memset(p, ' ', space_len);
   p += space_len;
@@ -79,11 +91,14 @@ static void exec_once(Decode *s, vaddr_t pc) {
   disassemble(p, s->logbuf + sizeof(s->logbuf) - p,
       MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst, ilen);
 #endif
+// HGH: TO RECORD WHAT INSTRUCTION IS EXECUTED  
+Log("%.*s\n", 50, s->logbuf);
 }
 
 static void execute(uint64_t n) {
   Decode s;
   for (;n > 0; n --) {
+    // cpu is global 
     exec_once(&s, cpu.pc);
     g_nr_guest_inst ++;
     trace_and_difftest(&s, cpu.pc);
