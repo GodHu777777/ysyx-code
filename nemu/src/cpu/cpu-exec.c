@@ -27,6 +27,10 @@
  */
 #define MAX_INST_TO_PRINT 10
 
+// char* iring_buf[MAX_INST_TO_PRINT + 5];
+// static int iring_buf_count = 0;
+
+
 CPU_state cpu = {};
 uint64_t g_nr_guest_inst = 0;
 static uint64_t g_timer = 0; // unit: us
@@ -87,12 +91,19 @@ static void exec_once(Decode *s, vaddr_t pc) {
   memset(p, ' ', space_len);
   p += space_len;
 
+  // str is ouput string pointer, size is maxsize, 
   void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
   disassemble(p, s->logbuf + sizeof(s->logbuf) - p,
       MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst, ilen);
 #endif
 // HGH: TO RECORD WHAT INSTRUCTION IS EXECUTED  
 Log("%.*s\n", 50, s->logbuf);
+
+// iring_buf[iring_buf_count % MAX_INST_TO_PRINT] = s->logbuf;
+// Log("# IRINGBUFCNT: %d", iring_buf_count);
+
+// iring_buf_count++;
+
 }
 
 static void execute(uint64_t n) {
@@ -117,6 +128,15 @@ static void statistic() {
 }
 
 void assert_fail_msg() {
+  // // show iring_buf
+  // for(int i = 0; i < MAX_INST_TO_PRINT; i++) {
+  //   if(i == iring_buf_count % MAX_INST_TO_PRINT) {
+  //     printf("-----> ");
+  //   }else printf("       ");
+
+  //   printf("%s\n", iring_buf[i]);
+
+  // }
   isa_reg_display();
   statistic();
 }
